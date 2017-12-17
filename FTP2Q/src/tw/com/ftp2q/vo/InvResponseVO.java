@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 
-
-
 /*******************
  * 解析金財通發票回復檔名後所產生的Object
  * 
