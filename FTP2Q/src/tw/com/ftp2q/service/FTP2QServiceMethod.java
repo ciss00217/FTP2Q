@@ -119,8 +119,10 @@ public class FTP2QServiceMethod {
 
 		Type listType = new TypeToken<List<OrderResponseVO>>() {
 		}.getType();
+		
 		Gson gson = new GsonBuilder().setDateFormat("yyyyMMdd HH:mm:ss").create();
 		String json = gson.toJson(orderResponseVOs, listType);
+		
 		return json;
 	}
 }

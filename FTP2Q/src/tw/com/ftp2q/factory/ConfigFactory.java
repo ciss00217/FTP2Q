@@ -2,7 +2,6 @@ package tw.com.ftp2q.factory;
 
 import java.io.File;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -13,7 +12,6 @@ import com.rabbitmq.jms.admin.RMQDestination;
 
 import tw.com.ftp2q.producer.ProducerMessage;
 import tw.com.ftp2q.vo.FTP2QVO;
-import tw.com.ftp2q.vo.FTPConnectionFactoryVO;
 import tw.com.ftp2q.vo.HeartBeatConnectionFactoryVO;
 import tw.com.ftp2q.vo.HeartBeatDestinationVO;
 import tw.com.heartbeat.clinet.vo.HeartBeatClientVO;
@@ -24,7 +22,7 @@ public class ConfigFactory {
 	public ConfigFactory(String filePath) {
 		this.filePath = filePath;
 	}
-	
+
 	public FTP2QVO getFTP2QVO() {
 
 		try {
@@ -41,7 +39,6 @@ public class ConfigFactory {
 		}
 
 	}
-	
 
 	public RMQDestination getFTP2QInvDestination() {
 		try {
@@ -50,9 +47,9 @@ public class ConfigFactory {
 
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			FTP2QVO ftp2QVO = (FTP2QVO) jaxbUnmarshaller.unmarshal(file);
-			
-			//因功能需求一樣拿來當模板
-			tw.com.ftp2q.vo.HeartBeatDestinationVO destinationVO=ftp2QVO.getInvDestination();
+
+			// 因功能需求一樣拿來當模板
+			tw.com.ftp2q.vo.HeartBeatDestinationVO destinationVO = ftp2QVO.getInvDestination();
 
 			RMQDestination rMQDestination = new RMQDestination();
 
@@ -63,7 +60,6 @@ public class ConfigFactory {
 			rMQDestination.setAmqpRoutingKey(destinationVO.getAmqpRoutingKey());
 
 			return rMQDestination;
-
 
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -79,7 +75,7 @@ public class ConfigFactory {
 
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			FTP2QVO ftp2QVO = (FTP2QVO) jaxbUnmarshaller.unmarshal(file);
-			tw.com.ftp2q.vo.HeartBeatDestinationVO destinationVO =ftp2QVO.getInvErrorDestination();
+			tw.com.ftp2q.vo.HeartBeatDestinationVO destinationVO = ftp2QVO.getInvErrorDestination();
 
 			RMQDestination rMQDestination = new RMQDestination();
 			rMQDestination.setDestinationName(destinationVO.getDestinationName());
@@ -96,7 +92,7 @@ public class ConfigFactory {
 		}
 
 	}
-	
+
 	public RMQDestination getFTP2QOrderErrorDestination() {
 
 		try {
@@ -105,7 +101,7 @@ public class ConfigFactory {
 
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			FTP2QVO ftp2QVO = (FTP2QVO) jaxbUnmarshaller.unmarshal(file);
-			tw.com.ftp2q.vo.HeartBeatDestinationVO destinationVO =ftp2QVO.getOrderErrorDestination();
+			tw.com.ftp2q.vo.HeartBeatDestinationVO destinationVO = ftp2QVO.getOrderErrorDestination();
 
 			RMQDestination rMQDestination = new RMQDestination();
 			rMQDestination.setDestinationName(destinationVO.getDestinationName());
@@ -147,7 +143,7 @@ public class ConfigFactory {
 		}
 
 	}
-	
+
 	public HeartBeatClientVO createHeartBeatClientVO() {
 		try {
 			File file = new File(filePath);
@@ -166,55 +162,52 @@ public class ConfigFactory {
 		}
 
 	}
-	
 
-	
 	public ProducerMessage createOrderProducer() throws JMSException, JAXBException {
-		
-			File file = new File(filePath);
-			JAXBContext jaxbContext = JAXBContext.newInstance(FTP2QVO.class);
 
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			FTP2QVO ftp2QVO = (FTP2QVO) jaxbUnmarshaller.unmarshal(file);
+		File file = new File(filePath);
+		JAXBContext jaxbContext = JAXBContext.newInstance(FTP2QVO.class);
 
-			HeartBeatDestinationVO destinationVO = ftp2QVO.getOrderDestination();
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		FTP2QVO ftp2QVO = (FTP2QVO) jaxbUnmarshaller.unmarshal(file);
 
-			RMQDestination orderDestination = new RMQDestination();
+		HeartBeatDestinationVO destinationVO = ftp2QVO.getOrderDestination();
 
-			orderDestination.setDestinationName(destinationVO.getDestinationName());
-			orderDestination.setAmqp(destinationVO.isAmqp());
-			orderDestination.setAmqpExchangeName(destinationVO.getAmqpExchangeName());
-			orderDestination.setAmqpQueueName(destinationVO.getAmqpQueueName());
-			orderDestination.setAmqpRoutingKey(destinationVO.getAmqpRoutingKey());
+		RMQDestination orderDestination = new RMQDestination();
 
-			destinationVO = ftp2QVO.getOrderErrorDestination();
+		orderDestination.setDestinationName(destinationVO.getDestinationName());
+		orderDestination.setAmqp(destinationVO.isAmqp());
+		orderDestination.setAmqpExchangeName(destinationVO.getAmqpExchangeName());
+		orderDestination.setAmqpQueueName(destinationVO.getAmqpQueueName());
+		orderDestination.setAmqpRoutingKey(destinationVO.getAmqpRoutingKey());
 
-			RMQDestination errorDestination = new RMQDestination();
+		destinationVO = ftp2QVO.getOrderErrorDestination();
 
-			errorDestination.setDestinationName(destinationVO.getDestinationName());
-			errorDestination.setAmqp(destinationVO.isAmqp());
-			errorDestination.setAmqpExchangeName(destinationVO.getAmqpExchangeName());
-			errorDestination.setAmqpQueueName(destinationVO.getAmqpQueueName());
-			errorDestination.setAmqpRoutingKey(destinationVO.getAmqpRoutingKey());
+		RMQDestination errorDestination = new RMQDestination();
 
-			HeartBeatConnectionFactoryVO connectionFactoryVO = ftp2QVO.getHeartBeatConnectionFactoryVO();
+		errorDestination.setDestinationName(destinationVO.getDestinationName());
+		errorDestination.setAmqp(destinationVO.isAmqp());
+		errorDestination.setAmqpExchangeName(destinationVO.getAmqpExchangeName());
+		errorDestination.setAmqpQueueName(destinationVO.getAmqpQueueName());
+		errorDestination.setAmqpRoutingKey(destinationVO.getAmqpRoutingKey());
 
-			RMQConnectionFactory rMQConnectionFactory = new RMQConnectionFactory();
-			rMQConnectionFactory.setPassword(connectionFactoryVO.getPassword());
-			rMQConnectionFactory.setHost(connectionFactoryVO.getHost());
-			rMQConnectionFactory.setUsername(connectionFactoryVO.getUsername());
-			rMQConnectionFactory.setVirtualHost(connectionFactoryVO.getVirtualHost());
+		HeartBeatConnectionFactoryVO connectionFactoryVO = ftp2QVO.getHeartBeatConnectionFactoryVO();
 
-			ProducerMessage producrerMessage = new ProducerMessage(orderDestination, errorDestination,
-					rMQConnectionFactory);
+		RMQConnectionFactory rMQConnectionFactory = new RMQConnectionFactory();
+		rMQConnectionFactory.setPassword(connectionFactoryVO.getPassword());
+		rMQConnectionFactory.setHost(connectionFactoryVO.getHost());
+		rMQConnectionFactory.setUsername(connectionFactoryVO.getUsername());
+		rMQConnectionFactory.setVirtualHost(connectionFactoryVO.getVirtualHost());
 
-		
+		ProducerMessage producrerMessage = new ProducerMessage(orderDestination, errorDestination,
+				rMQConnectionFactory);
+
 		return producrerMessage;
 
 	}
-	
-	public ProducerMessage createInvProducer() throws JAXBException, JMSException{
-		
+
+	public ProducerMessage createInvProducer() throws JAXBException, JMSException {
+
 		File file = new File(filePath);
 		JAXBContext jaxbContext = JAXBContext.newInstance(FTP2QVO.class);
 
@@ -252,9 +245,8 @@ public class ConfigFactory {
 		ProducerMessage producrerMessage = new ProducerMessage(invDestination, errorDestination,
 				rMQConnectionFactory);
 
-	
-	return producrerMessage;
+		return producrerMessage;
 
-}
-	
+	}
+
 }

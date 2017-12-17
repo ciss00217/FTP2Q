@@ -17,8 +17,12 @@ import tw.com.heartbeat.clinet.vo.HeartBeatClientVO;
 /************************************************************************
  * 功能: 抓取金財通之訂單及發票回復資料 到分別的Queue
  * 
- * 邏輯: 1. 抓取統編一樣的資料 2. 排除最後時間lastOrder,lastInvstatus之前的 3. 將資料丟到Queue 4.
- * 紀錄時間最大的資料到lastOrder,lastInvstatus到xml 5. 休眠30分
+ * 邏輯: 
+ * 1. 抓取統編一樣的資料 
+ * 2. 排除最後時間lastOrder,lastInvstatus之前的 
+ * 3. 將資料丟到Queue 
+ * 4. 紀錄時間最大的資料到lastOrder,lastInvstatus到xml 
+ * 5. 休眠30分
  ************************************************************************/
 
 public class FTP2QService {

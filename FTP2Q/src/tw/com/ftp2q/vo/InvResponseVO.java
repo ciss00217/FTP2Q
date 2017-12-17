@@ -5,6 +5,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+
+
+
+/*******************
+ * 解析金財通發票回復檔名後所產生的Object
+ * 
+ * uniformNumbers	:	統一邊號
+ * type				:	資料類別
+ * fileName			:	檔案名稱(含附檔名)
+ * lastResponseDate	:	最後回應時間
+ * *****************/
 public class InvResponseVO {
 	private String uniformNumbers;
 	private String type;
